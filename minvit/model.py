@@ -38,7 +38,7 @@ class SelfAttention(nn.Module):
         super().__init__()
         self.num_heads = config.num_heads
         self.head_size = config.embed_dim // config.num_heads  # to keep compute and number of params constant head size is set to D / k (appendix eq. 5)
-        self.qkv = nn.Linear(config.embed_dim, 3*config.embed_dims, bias=config.bias)
+        self.qkv = nn.Linear(config.embed_dim, 3*config.embed_dim, bias=config.bias)
         self.dropout = nn.Dropout(p=config.dropout)
         self.proj = nn.Linear(config.embed_dim, config.embed_dim)
 
@@ -73,9 +73,9 @@ class Transformer(nn.Module):
     """
     def __init__(self, config):
         super().__init__()
-        self.ln1 = nn.LayerNorm(config.embed_dim, bias=config.bias)
+        self.ln1 = nn.LayerNorm(config.embed_dim)
         self.attn = SelfAttention(config)
-        self.ln2 = nn.LayerNorm(config.embed_dim, bias=config.bias)
+        self.ln2 = nn.LayerNorm(config.embed_dim)
         self.mlp = MLP(config)
 
     def forward(self, x):
@@ -102,6 +102,7 @@ class ViTConfig:
 class ViT(nn.Module):
     """Implementation of the Vision Transformer"""
     def __init__(self, config):
+        super().__init__()
         assert config.img_size % config.patch_size == 0, "image is not divisible by patch size"
         num_patch = config.img_size**2 // config.patch_size**2
         self.patch_embedding = PatchEmbedding(config)
@@ -123,4 +124,3 @@ class ViT(nn.Module):
         for block in self.transformer:
             x = block(x)
         return self.mlp_head(x[:, 0]) # take only the cls token for classification
-         
