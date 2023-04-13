@@ -10,7 +10,6 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 
 def load_dataset(path: str = "/home/pumetu/data/", dataset: str = "mnist", transform: bool = False, batch_size: int =32):
     if dataset == "mnist":
-        path += "mnist"        
         if transform:
             transform = transforms.Compose([
                 transforms.ToTensor(), 

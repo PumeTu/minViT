@@ -1,3 +1,4 @@
+from tqdm import tqdm
 import torch
 import torch.nn as nn
 import torch.utils.data as data
@@ -15,7 +16,8 @@ class Trainer:
     def train(self, train_loader, val_loader, epochs):
         """Train the model for number of epochs specified"""
         train_losses, val_losses, accuracies = [], [], []
-        for epoch in range(epochs):
+        print("--------- Starting Training ---------")
+        for epoch in tqdm(range(epochs)):
             train_loss = self.fit(train_loader)
             accuracy, val_loss = self.evaluate(val_loader) 
             train_losses.append(train_loss)
@@ -30,7 +32,7 @@ class Trainer:
         """Fit the model through a single epoch"""
         self.model.train()
         total_loss = 0
-        for imgs, labels in train_loader:
+        for imgs, labels in tqdm(train_loader):
             imgs, labels = imgs.to(self.device), labels.to(self.device)
             out = self.model(imgs)
             loss = self.loss_fn(out, labels)
