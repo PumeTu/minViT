@@ -32,7 +32,7 @@ class Trainer:
         """Fit the model through a single epoch"""
         self.model.train()
         total_loss = 0
-        for imgs, labels in tqdm(train_loader):
+        for imgs, labels in train_loader:
             imgs, labels = imgs.to(self.device), labels.to(self.device)
             out = self.model(imgs)
             loss = self.loss_fn(out, labels)

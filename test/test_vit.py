@@ -9,7 +9,7 @@ from minvit.utils import load_dataset
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 def test_single_mnist():
-    train_loader, _ = load_dataset(dataset="mnist", transform=True, batch_size=32)
+    train_loader, _ = load_dataset(dataset="mnist", transform=True, batch_size=64)
     config = ViTConfig(num_classes=10, in_channels=1)
     model = ViT(config).to(device)
     optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
@@ -26,5 +26,5 @@ def test_mnist():
     optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
     loss_fn = nn.CrossEntropyLoss()
     trainer = Trainer(model, optimizer, loss_fn, device)
-    train_loss, val_loss, accuracy = trainer.train(train_loader, val_loader, epochs=5)
+    train_loss, val_loss, accuracy = trainer.train(train_loader, val_loader, epochs=2)
     print(f"train: {train_loss}, val: {val_loss}, accuracy: {accuracy}")
